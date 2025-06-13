@@ -26,9 +26,13 @@
 //! # env::set_current_dir(&tempdir).unwrap();
 //! # env::set_var("OUT_DIR", tempdir.path());
 //! # fs::write("root.proto", "").unwrap();
+//! use bytes::{Buf, BytesMut};
 //! use protox::prost::Message;
 //!
 //! let file_descriptors = protox::compile(["root.proto"], ["."]).unwrap();
+//! let mut buf = BytesMut::with_capacity(file_descriptors.encoded_len());
+//! file_descriptors.encode(&mut buf);
+//! let file_descriptors: prost_types_013::FileDescriptorSet = prost_013::Message::decode(buf).unwrap();
 //!
 //! tonic_build::configure()
 //!     .build_server(true)
